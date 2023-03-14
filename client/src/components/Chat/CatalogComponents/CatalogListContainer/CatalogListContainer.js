@@ -5,12 +5,12 @@ import CatalogList from '../CatalogList/CatalogList';
 import DialogList from '../../DialogComponents/DialogList/DialogList';
 
 const CatalogListContainer = (props) => {
-  // componentDidMount() {
-  //   props.getCatalogList();
-  // }
+  
+    const {getCatalogList} = props;
+
     useEffect(() => {
-      props.getCatalogList();
-    }, [props])
+      getCatalogList();
+    }, [getCatalogList])
 
     removeChatFromCatalog = (event, chatId) => {
       const { _id } = props.chatStore.currentCatalog;

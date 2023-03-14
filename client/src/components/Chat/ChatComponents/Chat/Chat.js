@@ -19,14 +19,15 @@ import CatalogListHeader from '../../CatalogComponents/CatalogListHeader/Catalog
 import ChatError from '../../../ChatError/ChatError';
 
 const Chat = (props) => {
-
+  const { id } = props.userStore.data;
+  const { changeShow, getPreviewChat } = props;
     useEffect(() => {
-      chatController.subscribeChat(props.userStore.data.id);
-      props.getPreviewChat();
+      chatController.subscribeChat(id);
+      getPreviewChat();
       return () => {
-        chatController.unsubscribeChat(props.userStore.data.id);
+        chatController.unsubscribeChat(id);
       }
-    }, [props])
+    }, [id, getPreviewChat])
 
     const renderDialogList = () => {
       const { setChatPreviewMode } = props;
@@ -83,8 +84,7 @@ const Chat = (props) => {
       const {
         isExpanded, isShow, isShowCatalogCreation, error,
       } = props.chatStore;
-      const { id } = props.userStore.data;
-      const { changeShow, getPreviewChat } = props;
+      
       return (
         <div className={classNames(styles.chatContainer, { [styles.showChat]: isShow })}>
           {error && <ChatError getData={getPreviewChat} />}

@@ -12,15 +12,14 @@ import AddToCatalog from '../AddToCatalog/AddToCatalog';
 import CreateCatalog from '../CreateCatalog/CreateCatalog';
 
 const CatalogCreation = (props) => {
-  
-  useEffect(() => {
-    props.getCatalogList();
-  }, [props])
-
-  
-    const {
-      changeTypeOfChatAdding, catalogCreationMode, changeShowAddChatToCatalogMenu, isFetching,
+   const {
+      getCatalogList ,changeTypeOfChatAdding, catalogCreationMode, changeShowAddChatToCatalogMenu, isFetching,
     } = props;
+  
+    useEffect(() => {
+    getCatalogList();
+  }, [getCatalogList])
+
     const { ADD_CHAT_TO_OLD_CATALOG, CREATE_NEW_CATALOG_AND_ADD_CHAT } = CONSTANTS;
     return (
       <>

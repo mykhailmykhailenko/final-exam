@@ -31,12 +31,13 @@ const ContestPage = (props) => {
       props.getData({ contestId: params.id });
     }, [props]);
 
+    const {changeEditContest} = props;
     useEffect(() => {
       getData();
       return () => {
-        props.changeEditContest(false);
+        changeEditContest(false);
       }
-    }, [getData, props])
+    }, [getData, changeEditContest])
 
     const setOffersList = () => {
       const array = [];

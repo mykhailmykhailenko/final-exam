@@ -6,12 +6,13 @@ import CONSTANTS from '../../constants';
 import { clearUserStore, headerRequest } from '../../actions/actionCreator';
 
 const Header = (props) => {
-
+  
+  const {getUser, data} = props;
   useEffect (() => {
-    if (!props.data) {
-      props.getUser();
+    if (!data) {
+      getUser();
     }
-  }, [props])
+  }, [data, getUser])
 
     const logOut = () => {
       localStorage.clear();

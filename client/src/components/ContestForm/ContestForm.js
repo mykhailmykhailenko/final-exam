@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import { Form, Formik } from 'formik';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -30,7 +30,7 @@ const variableOptions = {
 };
 
 const ContestForm = (props) => {
-    const getPreference = useEffect(() => {
+    const getPreference = useCallback(() => {
       const { contestType } = props;
       switch (contestType) {
         case CONSTANTS.NAME_CONTEST: {

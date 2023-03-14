@@ -11,17 +11,18 @@ const LoginForm = (props) => {
   // componentWillUnmount() {
   //   props.authClear();
   // }
-    useEffect (() => {
-      props.authClear();
-    }, [props])
+  const { error, isFetching } = props.auth;
+  const { submitting, authClear } = props;
+    
+  useEffect (() => {
+      authClear();
+    }, [authClear])
 
     const clicked = (values) => {
       props.loginRequest({ data: values, history: props.history });
     };
 
     
-      const { error, isFetching } = props.auth;
-      const { submitting, authClear } = props;
 
       const formInputClasses = {
         container: styles.inputContainer,

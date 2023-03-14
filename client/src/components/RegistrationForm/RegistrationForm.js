@@ -12,10 +12,11 @@ import CONSTANTS from '../../constants';
 import Schems from '../../validators/validationSchems';
 
 const RegistrationForm = (props) => {
- 
+  const { submitting, auth, authClear } = props;
+
   useEffect(() => {
-    props.authClear();
-  }, [props])
+    authClear();
+  }, [authClear])
 
    const clicked = (values) => {
       props.register({
@@ -32,7 +33,7 @@ const RegistrationForm = (props) => {
     };
 
    
-      const { submitting, auth, authClear } = props;
+      
       const { error } = auth;
       const formInputClasses = {
         container: styles.inputContainer,
