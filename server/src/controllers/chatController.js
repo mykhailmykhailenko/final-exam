@@ -6,7 +6,6 @@ const db = require('../models');
 const userQueries = require('./queries/userQueries');
 const controller = require('../socketInit');
 const _ = require('lodash');
-
 module.exports.addMessage = async (req, res, next) => {
   const participants = [req.tokenData.userId, req.body.recipient];
   participants.sort(
@@ -68,7 +67,6 @@ module.exports.addMessage = async (req, res, next) => {
     next(err);
   }
 };
-
 module.exports.getChat = async (req, res, next) => {
   const participants = [req.tokenData.userId, req.body.interlocutorId];
   participants.sort(
@@ -96,7 +94,6 @@ module.exports.getChat = async (req, res, next) => {
         },
       },
     ]);
-
     const interlocutor = await userQueries.findUser(
       { id: req.body.interlocutorId });
     res.send({
@@ -113,7 +110,6 @@ module.exports.getChat = async (req, res, next) => {
     next(err);
   }
 };
-
 module.exports.getPreview = async (req, res, next) => {
   try {
     const conversations = await Message.aggregate([
@@ -155,7 +151,7 @@ module.exports.getPreview = async (req, res, next) => {
       interlocutors.push(conversation.participants.find(
         (participant) => participant !== req.tokenData.userId));
     });
-    const senders = await db.Users.findAll({
+    const senders = await db.User.findAll({
       where: {
         id: interlocutors,
       },
@@ -179,7 +175,6 @@ module.exports.getPreview = async (req, res, next) => {
     next(err);
   }
 };
-
 module.exports.blackList = async (req, res, next) => {
   const predicate = 'blackList.' +
     req.body.participants.indexOf(req.tokenData.userId);
@@ -195,7 +190,6 @@ module.exports.blackList = async (req, res, next) => {
     res.send(err);
   }
 };
-
 module.exports.favoriteChat = async (req, res, next) => {
   const predicate = 'favoriteList.' +
     req.body.participants.indexOf(req.tokenData.userId);
@@ -208,7 +202,6 @@ module.exports.favoriteChat = async (req, res, next) => {
     res.send(err);
   }
 };
-
 module.exports.createCatalog = async (req, res, next) => {
   console.log(req.body);
   const catalog = new Catalog({
@@ -223,7 +216,6 @@ module.exports.createCatalog = async (req, res, next) => {
     next(err);
   }
 };
-
 module.exports.updateNameCatalog = async (req, res, next) => {
   try {
     const catalog = await Catalog.findOneAndUpdate({
@@ -235,7 +227,6 @@ module.exports.updateNameCatalog = async (req, res, next) => {
     next(err);
   }
 };
-
 module.exports.addNewChatToCatalog = async (req, res, next) => {
   try {
     const catalog = await Catalog.findOneAndUpdate({
@@ -247,7 +238,6 @@ module.exports.addNewChatToCatalog = async (req, res, next) => {
     next(err);
   }
 };
-
 module.exports.removeChatFromCatalog = async (req, res, next) => {
   try {
     const catalog = await Catalog.findOneAndUpdate({
@@ -259,7 +249,6 @@ module.exports.removeChatFromCatalog = async (req, res, next) => {
     next(err);
   }
 };
-
 module.exports.deleteCatalog = async (req, res, next) => {
   try {
     await Catalog.remove(
@@ -269,7 +258,6 @@ module.exports.deleteCatalog = async (req, res, next) => {
     next(err);
   }
 };
-
 module.exports.getCatalogs = async (req, res, next) => {
   try {
     const catalogs = await Catalog.aggregate([
@@ -286,4 +274,4 @@ module.exports.getCatalogs = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-};
+};  
