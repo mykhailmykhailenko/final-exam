@@ -2,7 +2,7 @@ const http = require('http');
 const express = require('express');
 const cors = require('cors');
 require('./dbMongo/mongoose');
-const router = require('./router');
+const rootRouter = require('./router');
 const controller = require('./socketInit');
 const handlerError = require('./handlerError/handler');
 
@@ -12,7 +12,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use('/public', express.static('public'));
-app.use(router);
+app.use(rootRouter);
 app.use(handlerError);
 
 const server = http.createServer(app);

@@ -3,6 +3,7 @@ const basicMiddlewares = require('../middlewares/basicMiddlewares');
 const contestController = require('../controllers/contestController');
 const checkToken = require('../middlewares/checkToken');
 const upload = require('../utils/fileUpload');
+
 const contestRouter = Router();
 
 contestRouter.post(

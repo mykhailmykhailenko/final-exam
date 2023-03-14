@@ -3,7 +3,6 @@ const checkToken = require('../middlewares/checkToken');
 const chatController = require('../controllers/chatController');
 const chatRouter = Router();
 
-
 chatRouter.post(
     '/newMessage',
     checkToken.checkToken,
