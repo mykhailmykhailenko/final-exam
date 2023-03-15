@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react';
+import React from 'react';
 import { Form, Formik } from 'formik';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -29,36 +29,36 @@ const variableOptions = {
   },
 };
 
-const ContestForm = (props) => {
-    const getPreference = useCallback(() => {
-      const { contestType } = props;
+class ContestForm extends React.Component {
+    getPreference = () => {
+      const { contestType } = this.props;
       switch (contestType) {
         case CONSTANTS.NAME_CONTEST: {
-          props.getData({
+          this.props.getData({
             characteristic1: 'nameStyle',
             characteristic2: 'typeOfName',
           });
           break;
         }
         case CONSTANTS.TAGLINE_CONTEST: {
-          props.getData({ characteristic1: 'typeOfTagline' });
+          this.props.getData({ characteristic1: 'typeOfTagline' });
           break;
         }
         case CONSTANTS.LOGO_CONTEST: {
-          props.getData({ characteristic1: 'brandStyle' });
+          this.props.getData({ characteristic1: 'brandStyle' });
           break;
         }
-        default:  
       }
-    }, [props])
+    }
 
-    useEffect (() => {
-      getPreference();
-    }, [getPreference])
-    
-      const { isFetching, error } = props.dataForContest;
+    componentDidMount() {
+      this.getPreference();
+    }
+
+    render() {
+      const { isFetching, error } = this.props.dataForContest;
       if (error) {
-        return <TryAgain getData={getPreference} />;
+        return <TryAgain getData={this.getPreference} />;
       }
       if (isFetching) {
         return <Spinner />;
@@ -73,12 +73,12 @@ const ContestForm = (props) => {
                 focusOfWork: '',
                 targetCustomer: '',
                 file: '',
-                ...variableOptions[props.contestType],
-                ...props.initialValues,
+                ...variableOptions[this.props.contestType],
+                ...this.props.initialValues,
               }}
-              onSubmit={props.handleSubmit}
+              onSubmit={this.props.handleSubmit}
               validationSchema={Schems.ContestSchem}
-              innerRef={props.formRef}
+              innerRef={this.props.formRef}
               enableReinitialize
             >
               <Form>
@@ -105,7 +105,7 @@ const ContestForm = (props) => {
                       warning: styles.warning,
                     }}
                     header="Describe industry associated with your venture"
-                    optionsArray={props.dataForContest.data.industry}
+                    optionsArray={this.props.dataForContest.data.industry}
                   />
                 </div>
                 <div className={styles.inputContainer}>
@@ -138,7 +138,7 @@ const ContestForm = (props) => {
                     }}
                   />
                 </div>
-                <OptionalSelects {...props} />
+                <OptionalSelects {...this.props} />
                 <FieldFileInput
                   name="file"
                   classes={{
@@ -150,14 +150,14 @@ const ContestForm = (props) => {
                   }}
                   type="file"
                 />
-                {props.isEditContest
+                {this.props.isEditContest
                   ? <button type="submit" className={styles.changeData}>Set Data</button> : null}
               </Form>
             </Formik>
           </div>
         </>
       );
-    
+    }
 }
 
 const mapStateToProps = (state, ownProps) => {

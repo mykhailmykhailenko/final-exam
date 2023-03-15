@@ -1,25 +1,22 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { getCatalogList, removeChatFromCatalog } from '../../../../actions/actionCreator';
 import CatalogList from '../CatalogList/CatalogList';
 import DialogList from '../../DialogComponents/DialogList/DialogList';
 
-const CatalogListContainer = (props) => {
-  
-    const {getCatalogList} = props;
-
-    useEffect(() => {
-      getCatalogList();
-    }, [getCatalogList])
+class CatalogListContainer extends React.Component {
+  componentDidMount() {
+    this.props.getCatalogList();
+  }
 
     removeChatFromCatalog = (event, chatId) => {
-      const { _id } = props.chatStore.currentCatalog;
-      props.removeChatFromCatalog({ chatId, catalogId: _id });
+      const { _id } = this.props.chatStore.currentCatalog;
+      this.props.removeChatFromCatalog({ chatId, catalogId: _id });
       event.stopPropagation();
     };
 
-    const getDialogsPreview = () => {
-      const { messagesPreview, currentCatalog } = props.chatStore;
+    getDialogsPreview = () => {
+      const { messagesPreview, currentCatalog } = this.props.chatStore;
       const { chats } = currentCatalog;
       const dialogsInCatalog = [];
       for (let i = 0; i < messagesPreview.length; i++) {
@@ -32,22 +29,22 @@ const CatalogListContainer = (props) => {
       return dialogsInCatalog;
     };
 
-    
-      const { catalogList, isShowChatsInCatalog } = props.chatStore;
-      const { id } = props.userStore.data;
+    render() {
+      const { catalogList, isShowChatsInCatalog } = this.props.chatStore;
+      const { id } = this.props.userStore.data;
       return (
         <>
           {isShowChatsInCatalog ? (
             <DialogList
               userId={id}
-              preview={getDialogsPreview()}
-              removeChat={removeChatFromCatalog}
+              preview={this.getDialogsPreview()}
+              removeChat={this.removeChatFromCatalog}
             />
           )
             : <CatalogList catalogList={catalogList} />}
         </>
       );
-    
+    }
 }
 
 const mapStateToProps = (state) => {

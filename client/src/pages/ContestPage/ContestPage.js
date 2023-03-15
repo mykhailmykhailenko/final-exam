@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import isEqual from 'lodash/isEqual';
@@ -24,46 +24,45 @@ import TryAgain from '../../components/TryAgain/TryAgain';
 import 'react-image-lightbox/style.css';
 import Error from '../../components/Error/Error';
 
-const ContestPage = (props) => {
+class ContestPage extends React.Component {
+  componentWillUnmount() {
+    this.props.changeEditContest(false);
+  }
 
-    const getData = useCallback(() => {
-      const { params } = props.match;
-      props.getData({ contestId: params.id });
-    }, [props]);
+  componentDidMount() {
+    this.getData();
+  }
 
-    const {changeEditContest} = props;
-    useEffect(() => {
-      getData();
-      return () => {
-        changeEditContest(false);
-      }
-    }, [getData, changeEditContest])
+    getData = () => {
+      const { params } = this.props.match;
+      this.props.getData({ contestId: params.id });
+    };
 
-    const setOffersList = () => {
+    setOffersList = () => {
       const array = [];
-      for (let i = 0; i < props.contestByIdStore.offers.length; i++) {
+      for (let i = 0; i < this.props.contestByIdStore.offers.length; i++) {
         array.push(<OfferBox
-          data={props.contestByIdStore.offers[i]}
-          key={props.contestByIdStore.offers[i].id}
-          needButtons={needButtons}
-          setOfferStatus={setOfferStatus}
-          contestType={props.contestByIdStore.contestData.contestType}
+          data={this.props.contestByIdStore.offers[i]}
+          key={this.props.contestByIdStore.offers[i].id}
+          needButtons={this.needButtons}
+          setOfferStatus={this.setOfferStatus}
+          contestType={this.props.contestByIdStore.contestData.contestType}
           date={new Date()}
         />);
       }
       return array.length !== 0 ? array : <div className={styles.notFound}>There is no suggestion at this moment</div>;
     };
 
-    const needButtons = (offerStatus) => {
-      const contestCreatorId = props.contestByIdStore.contestData.User.id;
-      const userId = props.userStore.data.id;
-      const contestStatus = props.contestByIdStore.contestData.status;
+    needButtons = (offerStatus) => {
+      const contestCreatorId = this.props.contestByIdStore.contestData.User.id;
+      const userId = this.props.userStore.data.id;
+      const contestStatus = this.props.contestByIdStore.contestData.status;
       return (contestCreatorId === userId && contestStatus === CONSTANTS.CONTEST_STATUS_ACTIVE && offerStatus === CONSTANTS.OFFER_STATUS_PENDING);
     };
 
-    const setOfferStatus = (creatorId, offerId, command) => {
-      props.clearSetOfferStatusError();
-      const { id, orderId, priority } = props.contestByIdStore.contestData;
+    setOfferStatus = (creatorId, offerId, command) => {
+      this.props.clearSetOfferStatusError();
+      const { id, orderId, priority } = this.props.contestByIdStore.contestData;
       const obj = {
         command,
         offerId,
@@ -72,12 +71,12 @@ const ContestPage = (props) => {
         priority,
         contestId: id,
       };
-      props.setOfferStatus(obj);
+      this.props.setOfferStatus(obj);
     };
 
-    const findConversationInfo = (interlocutorId) => {
-      const { messagesPreview } = props.chatStore;
-      const { id } = props.userStore.data;
+    findConversationInfo = (interlocutorId) => {
+      const { messagesPreview } = this.props.chatStore;
+      const { id } = this.props.userStore.data;
       const participants = [id, interlocutorId];
       participants.sort((participant1, participant2) => participant1 - participant2);
       for (let i = 0; i < messagesPreview.length; i++) {
@@ -93,22 +92,23 @@ const ContestPage = (props) => {
       return null;
     };
 
-    const goChat = () => {
-      const { User } = props.contestByIdStore.contestData;
-      props.goToExpandedDialog({
+    goChat = () => {
+      const { User } = this.props.contestByIdStore.contestData;
+      this.props.goToExpandedDialog({
         interlocutor: User,
-        conversationData: findConversationInfo(User.id),
+        conversationData: this.findConversationInfo(User.id),
       });
     };
 
-    
-      const { role } = props.userStore.data;
+    render() {
+      const { role } = this.props.userStore.data;
       const {
         contestByIdStore,
         changeShowImage,
         changeContestViewMode,
+        getData,
         clearSetOfferStatusError,
-      } = props;
+      } = this.props;
       const {
         isShowOnFull,
         imagePath,
@@ -156,7 +156,7 @@ Offer
                       </div>
                       {
                                         isBrief
-                                          ? <Brief contestData={contestData} role={role} goChat={goChat} />
+                                          ? <Brief contestData={contestData} role={role} goChat={this.goChat} />
                                           : (
                                             <div className={styles.offersContainer}>
                                               {(role === CONSTANTS.CREATOR && contestData.status === CONSTANTS.CONTEST_STATUS_ACTIVE)
@@ -175,7 +175,7 @@ Offer
                                               />
                                               )}
                                               <div className={styles.offers}>
-                                                {setOffersList()}
+                                                {this.setOffersList()}
                                               </div>
                                             </div>
                                           )
@@ -190,7 +190,7 @@ Offer
             )}
         </div>
       );
-    
+    }
 }
 
 const mapStateToProps = (state) => {

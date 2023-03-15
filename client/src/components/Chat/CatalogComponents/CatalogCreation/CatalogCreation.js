@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import CONSTANTS from '../../../../constants';
@@ -11,15 +11,15 @@ import styles from './CatalogCreation.module.sass';
 import AddToCatalog from '../AddToCatalog/AddToCatalog';
 import CreateCatalog from '../CreateCatalog/CreateCatalog';
 
-const CatalogCreation = (props) => {
-   const {
-      getCatalogList ,changeTypeOfChatAdding, catalogCreationMode, changeShowAddChatToCatalogMenu, isFetching,
-    } = props;
-  
-    useEffect(() => {
-    getCatalogList();
-  }, [getCatalogList])
+class CatalogCreation extends React.Component {
+  componentDidMount() {
+    this.props.getCatalogList();
+  }
 
+  render() {
+    const {
+      changeTypeOfChatAdding, catalogCreationMode, changeShowAddChatToCatalogMenu, isFetching,
+    } = this.props;
     const { ADD_CHAT_TO_OLD_CATALOG, CREATE_NEW_CATALOG_AND_ADD_CHAT } = CONSTANTS;
     return (
       <>
@@ -47,7 +47,7 @@ const CatalogCreation = (props) => {
                 }
       </>
     );
-  
+  }
 }
 
 const mapStateToProps = (state) => state.chatStore;
